@@ -105,20 +105,21 @@ exports.getOneBook = async (req, res) => {
 
 exports.getBookByFilter = async (req, res) => {
   try {
-    const { maxValue, minValue, categoryId, condition, radio } = req.body;
-    var objectId = new mongoose.Types.ObjectId(categoryId);
+    const { maxValue, minValue, categoryId, condition, isDonate } = req.body;
     let query = {};
 
     if (maxValue != null && minValue != null) {
       query.price = { $gte: minValue, $lte: maxValue };
     }
     if (categoryId != null && categoryId != "") {
+      var objectId = new mongoose.Types.ObjectId(categoryId);
       query.category = objectId;
     }
     if (condition != null && condition != "") {
       query.condition = condition;
     }
-    if (radio == "Donate") {
+
+    if (isDonate == true) {
       query.radio = "donate";
     } else {
       query.radio = "sell";
@@ -126,7 +127,7 @@ exports.getBookByFilter = async (req, res) => {
     console.log(query);
     let bookData = await Book.find(query);
     console.log(bookData.length);
-    res.status(200).json(bookData);
+    res.status(200).json({ message: "ok", data: bookData });
   } catch (err) {
     console.log(err);
   }

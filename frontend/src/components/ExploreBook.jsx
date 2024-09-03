@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import Cards from "./Cards";
 import { StoreContext } from "../context/StoreContext";
@@ -12,66 +13,76 @@ function ExploreBook() {
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(100);
   const [selectedRange, setSelectedRange] = useState({ min: 0, max: 100 });
+  const [filters, setFilters] = useState({
+    minValue: selectedRange.min,
+    maxValue: selectedRange.max,
+    categoryId: "",
+    condition: "",
+    isDonate: "",
+  });
 
   const findMinMax = () => {
     const prices = bookData.map((book) => book.price);
     if (prices.length) {
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
-      setMin(minPrice);
-      setMax(maxPrice);
       setSelectedRange({ min: minPrice, max: maxPrice });
-
       return;
     }
   };
 
   useEffect(() => {
     findMinMax();
+    setFilterData(bookData);
   }, [bookData]);
 
-  const handleChangeValue2 = ({ min, max }) => {
-    console.log("Slider Min:", min, "Slider Max:", max);
-    setSelectedRange({ min: min, max: max });
+  const handleChangeValue2 = ({ minValue, maxValue }) => {
+    setMin((prevMin) => {
+      if (prevMin !== minValue) {
+        return minValue;
+      }
+      return prevMin;
+    });
+    setMax((prevMax) => {
+      if (prevMax !== maxValue) {
+        return maxValue;
+      }
+      return prevMax;
+    });
+    setFilters((prevFilters) => ({ ...prevFilters, minValue, maxValue }));
   };
-
-  const [filters, setFilters] = useState({
-    minValue: 0,
-    maxValue: 100,
-    categoryId: "",
-    condition: "",
-    isDonate: "",
-  });
 
   const handleSearch = (e) => {
     setValue(e.target.value);
   };
-  const filteredBookData = bookData.filter((book) =>
-    book.title.toLowerCase().includes(value.toLowerCase())
-  );
+  // const filteredBookData = bookData.filter((book) =>
+  //   book.title.toLowerCase().includes(value.toLowerCase())
+  // );
+  useEffect(() => {
+    handleChangeValue();
+  }, [min, max]);
 
   const handleChangeValue = async (e) => {
-    // const { name, value, type, checked } = e.target;
-    // if (type === "select-one") {
-    //   setFilters((prev) => ({ ...prev, [name]: value }));
-    // } else if (type === "radio" || type === "text") {
-    //   setFilters((prev) => ({ ...prev, [name]: value }));
-    // } else if (type === "checkbox") {
-    //   setFilters((prev) => ({ ...prev, [name]: checked }));
-    // }
-    // const data = {
-    //   ...filters,
-    //   [name]: type === "select-one" ? value : filters[name],
-    // };
-    // try {
-    //   const newUrl = url + "getBookByFilter";
-    //   const response = await axios.post(newUrl, data);
-    //   if (response.status === 200) {
-    //     setFilterData(response.data.data);
-    //   }
-    // } catch (error) {
-    //   console.error("Error fetching filtered data", error);
-    // }
+    if (e && e.target != undefined) {
+      const { name, type, value, checked } = e.target;
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [name]: type === "checkbox" ? checked : value,
+        minValue: min,
+        maxValue: max,
+      }));
+    }
+
+    try {
+      const newUrl = url + "getBookByFilter";
+      const response = await axios.post(newUrl, filters);
+      if (response.status === 200) {
+        console.log(response.data.data);
+        setFilterData(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching filtered data", error);
+    }
   };
 
   return (
@@ -96,7 +107,7 @@ function ExploreBook() {
                 <label className="block mb-2 font-medium">Category</label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md"
-                  value={filters.categoryId || ""}
+                  value={filters.categoryId || ""} 
                   name="categoryId"
                   onChange={handleChangeValue}
                 >
@@ -115,8 +126,8 @@ function ExploreBook() {
                   max={selectedRange.max}
                   step={5}
                   name="range"
-                  minValue={selectedRange.min}
-                  maxValue={selectedRange.max}
+                  minValue={min}
+                  maxValue={max}
                   onChange={handleChangeValue2}
                 />
               </div>
@@ -159,7 +170,7 @@ function ExploreBook() {
                 />
               </div>
             </div>
-            <Cards bookData={filteredBookData} />
+            <Cards bookData={filterData} />
           </div>
         </div>
       </div>
