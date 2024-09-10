@@ -20,6 +20,7 @@ function Login({ setlogin }) {
     country: "",
     zip: "",
     gender: "gender",
+    phone: "",
   });
 
   const handleSubmit = async (e) => {
@@ -38,7 +39,6 @@ function Login({ setlogin }) {
     }
 
     const response = await axios.post(newurl, obj);
-
     if (response.status === 200) {
       toast.success("Success notification!", { autoClose: 1500 });
       setTimeout(() => {
@@ -52,6 +52,7 @@ function Login({ setlogin }) {
           state: "",
           country: "",
           gender: "gender",
+          phone: "",
           zip: "",
         });
         localStorage.setItem("token", response.data.data.token);
@@ -222,21 +223,40 @@ function Login({ setlogin }) {
               )}
 
               {register && (
-                <div className="form-control mb-3">
-                  <label className="label">
-                    <span className="label-text">Gender</span>
-                  </label>
-                  <select
-                    className="select select-bordered w-full text-sm min-h-9 h-9 text-[#bebebe]"
-                    name="gender"
-                    onChange={handleChnageValue}
-                  >
-                    <option value="gender" disabled selected>
-                      Gender
-                    </option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
+                <div className="flex form-control mb-3 w-full flex-row gap-2">
+                  <div className="form-control w-1/2 mb-3">
+                    <label className="label">
+                      <span className="label-text">Gender</span>
+                    </label>
+                    <select
+                      className="select select-bordered w-full text-sm min-h-9 h-9 text-[#bebebe]"
+                      name="gender"
+                      onChange={handleChnageValue}
+                    >
+                      <option value="gender" disabled selected>
+                        Gender
+                      </option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+                  <div className="w-1/2">
+                    <label className="label">
+                      <span className="label-text">Phone</span>
+                    </label>
+                    <input
+                      type="Number"
+                      placeholder="Phone"
+                      className="input input-bordered text-sm w-full h-9"
+                      name="phone"
+                      pattern="\d{10}"
+                      value={data.phone}
+                     
+                      onChange={handleChnageValue}
+                      title="Phone number must be exactly 10 digits"
+                      required
+                    />
+                  </div>
                 </div>
               )}
               <div className="form-control mt-6">

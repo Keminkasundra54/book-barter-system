@@ -18,10 +18,7 @@ function UserOrder() {
     }
   };
   useEffect(() => {
-    const loadData = async () => {
-      await fetchOrderData();
-    };
-    loadData();
+    fetchOrderData();
   }, []);
 
   const navigate = useNavigate();
@@ -29,13 +26,13 @@ function UserOrder() {
   const handleViewClick = (orderId) => {
     navigate(`/order-details/${orderId}`); // Navigate to the detail page with order ID
   };
-
+  console.log(orderData);
   return (
     <div className="flex flex-col min-h-screen ">
       <Navbar />
       <div className="flex-grow overflow-y-auto mt-[68px] pb-10 ">
         <div className="grid w-full place-items-center align-start pt-2">
-          {orderData ? (
+          {orderData != null && orderData.length > 0 ? (
             <>
               <div className="hero-content flex flex-col max-w-5xl bg-white rounded-md p-8 w-full mx-4 lg:mx-0 shadow-2xl">
                 <div className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_auto] gap-4 items-center text-sm md:text-base font-bold w-full">

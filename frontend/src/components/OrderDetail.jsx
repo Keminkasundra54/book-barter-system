@@ -113,10 +113,10 @@ function OrderDetail() {
           <div className="w-full">
             <h3 className="font-bold text-left pb-4">Item orderd</h3>
             <div className="p-3 bg-slate-200 rounded-md">
-              <ul className="flex flex-col gap-4 w-full">
-                {orderData.items.map((item, index) => (
+              <div className="flex flex-col gap-4 w-full">
+                {orderData.items.map((item) => (
                   <>
-                    <li key={index} className="flex items-center gap-4 w-full">
+                    <div className="flex items-center gap-4 w-full">
                       <img
                         src={url + item.book.images[0]}
                         className="w-20 h-20 rounded-lg"
@@ -131,11 +131,11 @@ function OrderDetail() {
                       <span className="flex-none w-28 text-center">
                         {item.book.price * item.quantity}
                       </span>{" "}
-                    </li>
+                    </div>
                     <hr className="w-full h-[2px] bg-slate-800"></hr>
                   </>
                 ))}
-              </ul>
+              </div>
 
               <div className="flex flex-col items-end w-52 gap-3 ml-auto py-4">
                 <div className="flex justify-between w-full">

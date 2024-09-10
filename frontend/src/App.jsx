@@ -14,6 +14,8 @@ import Cart from "./pages/Cart";
 import AddAddress from "./pages/addAddress";
 import UserOrder from "./components/UserOrder";
 import OrderDetail from "./components/OrderDetail";
+import ReciveOrder from "./components/ReciveOrder";
+import AdminOrder from "./pages/AdminOrder";
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
         <Route path="/addAddress" Component={AddAddress}></Route>
         <Route path="/myOrder" Component={UserOrder}></Route>
         <Route path="/order-details/:id" Component={OrderDetail} />
+        <Route path="/incomingorder" Component={ReciveOrder} />
+        <Route path="/AdminOrder" Component={AdminOrder} />
       </Routes>
       <ToastContainer />
     </>
@@ -42,3 +46,5 @@ function App() {
 }
 
 export default App;
+
+

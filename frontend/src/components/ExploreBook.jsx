@@ -5,9 +5,11 @@ import { StoreContext } from "../context/StoreContext";
 import MultiRangeSlider from "multi-range-slider-react";
 import "../index.css";
 import axios from "axios";
+import Loader from "react-js-loader";
 
 function ExploreBook() {
   const { bookData, categoryData, url } = useContext(StoreContext);
+  const [loader, setloader] = useState(false);
   const [value, setValue] = useState("");
   const [filterData, setFilterData] = useState([]);
   const [min, setMin] = useState(0);
@@ -26,6 +28,8 @@ function ExploreBook() {
     if (prices.length) {
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
+      setMin(minPrice);
+      setMax(maxPrice);
       setSelectedRange({ min: minPrice, max: maxPrice });
       return;
     }
@@ -49,21 +53,48 @@ function ExploreBook() {
       }
       return prevMax;
     });
-    setFilters((prevFilters) => ({ ...prevFilters, minValue, maxValue }));
   };
 
   const handleSearch = (e) => {
     setValue(e.target.value);
   };
-  // const filteredBookData = bookData.filter((book) =>
-  //   book.title.toLowerCase().includes(value.toLowerCase())
-  // );
   useEffect(() => {
     handleChangeValue();
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      minValue: min,
+      maxValue: max,
+    }));
   }, [min, max]);
 
+  const handlecleareFilter = async () => {
+    setloader(true);
+    setTimeout(() => {
+      setloader(false);
+    }, 1000);
+    setFilters({
+      minValue: selectedRange.min,
+      maxValue: selectedRange.max,
+      categoryId: "",
+      condition: "",
+      isDonate: "",
+    });
+  };
+
+  useEffect(() => {
+    if (loader) {
+      const fetchFilteredData = async () => {
+        await myapiFunction();
+        setTimeout(() => {
+          setloader(false);
+        }, 1000);
+      };
+      fetchFilteredData();
+    }
+  }, [filters, loader]);
+
   const handleChangeValue = async (e) => {
-    if (e && e.target != undefined) {
+    if (e && e.target !== undefined) {
       const { name, type, value, checked } = e.target;
       setFilters((prevFilters) => ({
         ...prevFilters,
@@ -72,16 +103,14 @@ function ExploreBook() {
         maxValue: max,
       }));
     }
+    setloader(true);
+  };
 
-    try {
-      const newUrl = url + "getBookByFilter";
-      const response = await axios.post(newUrl, filters);
-      if (response.status === 200) {
-        console.log(response.data.data);
-        setFilterData(response.data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching filtered data", error);
+  const myapiFunction = async () => {
+    const newUrl = url + "getBookByFilter";
+    const response = await axios.post(newUrl, filters);
+    if (response.status === 200) {
+      setFilterData(response.data.data);
     }
   };
 
@@ -92,13 +121,15 @@ function ExploreBook() {
           All Books: Your Gateway to Great Stories
         </h1>
         <div className="books-content pt-5">
-          <input
-            type="text"
-            className="input input-bordered input-md w-full max-w-xs"
-            placeholder="Search"
-            value={value}
-            onChange={(e) => handleSearch(e)}
-          />
+          <div className="pl-[16px]">
+            <input
+              type="text"
+              className="input input-bordered input-md w-full max-w-xs"
+              placeholder="Search"
+              value={value}
+              onChange={(e) => handleSearch(e)}
+            />
+          </div>
 
           <div className="container mx-auto px-4 py-6 md:flex md:space-x-10">
             <div className="filter-section md:w-1/4 bg-gray-100 p-4 shadow-md rounded-lg h-1/2">
@@ -107,7 +138,7 @@ function ExploreBook() {
                 <label className="block mb-2 font-medium">Category</label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md"
-                  value={filters.categoryId || ""} 
+                  value={filters.categoryId || ""}
                   name="categoryId"
                   onChange={handleChangeValue}
                 >
@@ -169,8 +200,27 @@ function ExploreBook() {
                   checked={filters.isDonate}
                 />
               </div>
+              <div className="flex justify-end items-center">
+                <div className="link link-primary" onClick={handlecleareFilter}>
+                  clear filter
+                </div>
+              </div>
             </div>
-            <Cards bookData={filterData} />
+            {loader ? (
+              <div className="container mx-auto px-4  md:flex md:space-x-10">
+                <div className="absolute top-1/3 left-1/2">
+                  <Loader
+                    type="puff"
+                    bgColor={"#8f9193"}
+                    color={"white"}
+                    height={100}
+                    width={100}
+                  />
+                </div>
+              </div>
+            ) : (
+              <Cards bookData={filterData} />
+            )}
           </div>
         </div>
       </div>

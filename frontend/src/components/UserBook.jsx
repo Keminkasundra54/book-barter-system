@@ -35,6 +35,7 @@ function UserBook() {
         <Cards
           bookData={myBookData}
           token={token}
+          showfour={true}
           className="flex-grow overflow-y-auto"
         />
       </div>

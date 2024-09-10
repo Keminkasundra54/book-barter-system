@@ -12,7 +12,7 @@ function Category({ category, setcategory }) {
       <div className="max-w-screen-2xl container mx-auto md:px-20 ">
         <div className="lg:px-12 lg:py-6 flex justify-between items-center p-5">
           <h1 className="font-bold lg:text-4xl text-2xl">Category</h1>
-          {user.role == 1 && (
+          {user && user.role == 1 && (
             <Link to="categorys">
               <div className="show-more cursor-pointer hover:text-pink-900 duration-75">
                 View All

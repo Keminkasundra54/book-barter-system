@@ -1,5 +1,7 @@
+
 const Book = require("../model/book-model");
 var mongoose = require("mongoose");
+
 exports.addBook = async (req, res) => {
   try {
     const token = req.headers.token;
@@ -124,11 +126,10 @@ exports.getBookByFilter = async (req, res) => {
     } else {
       query.radio = "sell";
     }
-    console.log(query);
     let bookData = await Book.find(query);
-    console.log(bookData.length);
     res.status(200).json({ message: "ok", data: bookData });
   } catch (err) {
     console.log(err);
+    res.status(500).json(err);
   }
 };

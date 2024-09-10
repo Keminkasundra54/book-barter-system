@@ -7,7 +7,7 @@ export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
   const [login, setlogin] = useState(false);
-  const url = "http://192.168.1.13:4000/";
+  const url = "http://192.168.1.8:4000/";
   const [user, setuser] = useState({});
   const [role, setrole] = useState(null);
   const [token, setToken] = useState({});

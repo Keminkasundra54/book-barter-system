@@ -7,7 +7,7 @@ import "../index.css";
 import axiosInstance from "../axiosInstance";
 import { toast } from "react-toastify";
 
-function Cards({ bookData, category, token, limited, showDonatedOnly }) {
+function Cards({ bookData, category, token, limited, showfour }) {
   const { setBookItem, url, cartData, fetchCart, fetchOneBook, setlogin } =
     useContext(StoreContext);
 
@@ -54,6 +54,10 @@ function Cards({ bookData, category, token, limited, showDonatedOnly }) {
     }
   };
 
+  const handleRequest = async () => {
+    console.log("hy i am req");
+  };
+
   const handlePrev = (item, cardIndex) => {
     setCurrentIndexes((prevIndexes) => ({
       ...prevIndexes,
@@ -76,17 +80,11 @@ function Cards({ bookData, category, token, limited, showDonatedOnly }) {
 
   const filteredBookData = category
     ? bookData.filter(
-        (item) =>
-          (category === "All" || category === item.category) &&
-          (!showDonatedOnly ? item.radio === "sell" : item.radio === "donate")
+        (item) => category === "All" || category === item.category
       )
-    : bookData.filter((item) =>
-        !showDonatedOnly ? item.radio === "sell" : item.radio === "donate"
-      );
-
-  const limitedBookData = limited
-    ? filteredBookData.slice(0, 4)
-    : filteredBookData;
+    : bookData;
+  const booksForSell = filteredBookData.filter((book) => book.radio === "sell");
+  const limitedBookData = limited ? booksForSell.slice(0, 4) : filteredBookData;
 
   return (
     <>
@@ -95,7 +93,7 @@ function Cards({ bookData, category, token, limited, showDonatedOnly }) {
           <div className={`book-display-section `}>
             <div
               className={`card-container ${
-                limited
+                limited || showfour
                   ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
                   : "md:grid md:grid-cols-3 justify-items-center md:gap-14"
               }`}
@@ -184,7 +182,10 @@ function Cards({ bookData, category, token, limited, showDonatedOnly }) {
                       <div className="card-actions justify-end">
                         {!token ? (
                           item.radio === "donate" ? (
-                            <button className={`btn btn-success`}>
+                            <button
+                              className={`btn btn-success`}
+                              onClick={() => handleRequest()}
+                            >
                               Request
                             </button>
                           ) : (

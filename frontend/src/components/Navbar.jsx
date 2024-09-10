@@ -195,7 +195,7 @@ function Navbar({ setlogin }) {
                       <p>my Books</p>
                     </li>
                   </Link>
-                  {user && user.role == 1 && (
+                  {user != null && user.role == 1 && (
                     <Link to="/addCategory" onClick={() => setCategryItem({})}>
                       <li>
                         <p>Add Category</p>
@@ -210,6 +210,11 @@ function Navbar({ setlogin }) {
                   <Link to="/myorder">
                     <li>
                       <button>My Order</button>
+                    </li>
+                  </Link>
+                  <Link to="/incomingorder">
+                    <li>
+                      <button>Incoming Order</button>
                     </li>
                   </Link>
                   <li>

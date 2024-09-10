@@ -1,6 +1,7 @@
 const Book = require("../model/book-model");
 const Cart = require("../model/Cart-model");
 const Order = require("../model/order-model");
+const SellerOrder = require("../model/sellerOrder-model");
 const User = require("../model/user-model");
 const { v4: uuidv4 } = require("uuid");
 
@@ -38,7 +39,18 @@ exports.addOrder = async (req, res) => {
       orderNo: orderNo,
       trakingNO: randomString,
     });
-    await neworder.save();
+    const neworderdata = await neworder.save();
+
+    for (let i in cartData) {
+      const newSellerOrder = await SellerOrder({
+        book: cartData[i].book._id,
+        quantity: cartData[i].quantity,
+        seller: cartData[i].book.seller,
+        order: neworderdata._id,
+      });
+      await newSellerOrder.save();
+    }
+
     res.status(200).json({ message: "ok" });
   } catch (err) {
     console.log(err);
@@ -65,6 +77,77 @@ exports.getOrderDetail = async (req, res) => {
       order.items[i].book = book;
     }
     res.json({ message: "ok", data: order });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+exports.getSellerOrder = async (req, res) => {
+  try {
+    const token = req.headers.token;
+    const sellerOrderData = await SellerOrder.find({ seller: token }).populate({
+      path: "book",
+    });
+    res.json({ message: "ok", data: sellerOrderData });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+exports.getAllOrderData = async (req, res) => {
+  try {
+    let orderData = await Order.find({}).populate({ path: "userId" });
+    for (let i in orderData) {
+      const allseller = [];
+
+      const sellerOrder = await SellerOrder.find({
+        order: orderData[i]._id,
+      }).populate({ path: "book" });
+      for (let i in sellerOrder) {
+        const seller = await User.findOne({ token: sellerOrder[i].seller });
+        sellerOrder[i] = sellerOrder[i].toObject();
+        sellerOrder[i]["seller"] = seller;
+        allseller.push(sellerOrder[i]);
+      }
+      orderData[i] = orderData[i].toObject();
+      orderData[i]["items"] = allseller;
+    }
+
+    // let orderData = await SellerOrder.find({}).populate({ path: "order" });
+    // for (let i in orderData) {
+    //
+    // }
+    res.json({ message: "ok", data: orderData });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+exports.updateOrder = async (req, res) => {
+  try {
+    const { orderId, status } = req.body;
+    const updatedata = await Order.findOneAndUpdate(
+      { _id: orderId },
+      { $set: { status: status } }
+    );
+    if (updatedata) {
+      res.status(200).json({ message: "ok" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+exports.updateSellerStatus = async (req, res) => {
+  try {
+    const { sellerOrderId, status } = req.body;
+    const updatedata = await SellerOrder.findOneAndUpdate(
+      { _id: sellerOrderId },
+      { $set: { status: status } }
+    );
+    if (updatedata) {
+      res.status(200).json({ message: "ok" });
+    }
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
