@@ -1,4 +1,5 @@
 const Book = require("../model/book-model");
+const RequestedBook = require("../model/bookRequest-model");
 const Cart = require("../model/Cart-model");
 const Order = require("../model/order-model");
 const SellerOrder = require("../model/sellerOrder-model");
@@ -96,10 +97,32 @@ exports.getSellerOrder = async (req, res) => {
 };
 exports.getAllOrderData = async (req, res) => {
   try {
-    let orderData = await Order.find({}).populate({ path: "userId" });
+    let { month, year } = req.body;
+    const monthNames = {
+      January: 1,
+      February: 2,
+      March: 3,
+      April: 4,
+      May: 5,
+      June: 6,
+      July: 7,
+      August: 8,
+      September: 9,
+      October: 10,
+      November: 11,
+      December: 12,
+    };
+    const monthNo = monthNames[month] || null;
+    let orderData = await Order.find({
+      $expr: {
+        $and: [
+          { $eq: [{ $month: "$createdAt" }, monthNo] },
+          { $eq: [{ $year: "$createdAt" }, year] },
+        ],
+      },
+    }).populate({ path: "userId" });
     for (let i in orderData) {
       const allseller = [];
-
       const sellerOrder = await SellerOrder.find({
         order: orderData[i]._id,
       }).populate({ path: "book" });
@@ -148,6 +171,35 @@ exports.updateSellerStatus = async (req, res) => {
     if (updatedata) {
       res.status(200).json({ message: "ok" });
     }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+exports.addBookRequest = async (req, res) => {
+  try {
+    const myData = await RequestedBook.find({});
+
+    const newRequest = new RequestedBook(req.body);
+    if (req.body.user == null && req.body.user != undefined) {
+      console.log("hy");
+    }
+    newRequest.orderNo = myData.length + 1;
+    await newRequest.save();
+    res.json({ message: "ok" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+exports.getRequestedBook = async (req, res) => {
+  try {
+    const user = await User.findOne({ token: req.headers.token });
+    const myData = await RequestedBook.find({ user: user._id }).populate({
+      path: "book",
+      ref: "book",
+    });
+    res.json({ message: "ok", data: myData });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);

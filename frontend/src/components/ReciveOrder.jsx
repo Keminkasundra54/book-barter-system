@@ -64,8 +64,8 @@ function ReciveOrder() {
               </div>
             </>
           ) : (
-            <div className="">
-              <p>You Have No Recive any Order!</p>
+            <div className="flex items-center justify-center absolute top-1/3 left-[46%]">
+              <h4 className="">You Have No Recive any Order!</h4>{" "}
             </div>
           )}
         </div>

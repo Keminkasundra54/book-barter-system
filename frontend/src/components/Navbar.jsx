@@ -192,7 +192,7 @@ function Navbar({ setlogin }) {
                   </Link>
                   <Link to="/mysellbook">
                     <li>
-                      <p>my Books</p>
+                      <p>my Selling Book</p>
                     </li>
                   </Link>
                   {user != null && user.role == 1 && (
@@ -202,14 +202,14 @@ function Navbar({ setlogin }) {
                       </li>
                     </Link>
                   )}
-                  <Link to="/cart">
-                    <li>
-                      <button>My Cart</button>
-                    </li>
-                  </Link>
                   <Link to="/myorder">
                     <li>
                       <button>My Order</button>
+                    </li>
+                  </Link>
+                  <Link to="/RequestedBooks">
+                    <li>
+                      <button>My Requested Book</button>
                     </li>
                   </Link>
                   <Link to="/incomingorder">

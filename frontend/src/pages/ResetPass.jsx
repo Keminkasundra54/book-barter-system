@@ -20,7 +20,6 @@ function ResetPass() {
   const handleresetpass = async (e) => {
     e.preventDefault();
     const newurl = url + "resetpassword";
-
     const response = await axios.post(newurl, data);
     if (response.status == 200) {
       toast.success("your password reset successfull", { autoClose: 1500 });

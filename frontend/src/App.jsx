@@ -16,6 +16,8 @@ import UserOrder from "./components/UserOrder";
 import OrderDetail from "./components/OrderDetail";
 import ReciveOrder from "./components/ReciveOrder";
 import AdminOrder from "./pages/AdminOrder";
+import UserRequestedBook from "./components/UserRequestedBook";
+import AddRequest from "./pages/AddRequest";
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
         <Route path="/order-details/:id" Component={OrderDetail} />
         <Route path="/incomingorder" Component={ReciveOrder} />
         <Route path="/AdminOrder" Component={AdminOrder} />
+        <Route path="/RequestedBooks" Component={UserRequestedBook} />
+        <Route path="/AddRequestBook/:id" Component={AddRequest} />
       </Routes>
       <ToastContainer />
     </>
@@ -46,5 +50,3 @@ function App() {
 }
 
 export default App;
-
-

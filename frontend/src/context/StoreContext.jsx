@@ -7,7 +7,7 @@ export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
   const [login, setlogin] = useState(false);
-  const url = "http://192.168.1.8:4000/";
+  const url = "http://192.168.1.16:4000/";
   const [user, setuser] = useState({});
   const [role, setrole] = useState(null);
   const [token, setToken] = useState({});
@@ -18,6 +18,9 @@ const StoreContextProvider = (props) => {
   const [categoryItem, setCategryItem] = useState({});
   const [cartData, setCartData] = useState({});
   const [totalBil, setTotalBil] = useState(0);
+  const [requestedBookData, setRequestedBookData] = useState([]);
+  const [requestedBook, setRequestedBook] = useState({});
+  const [requestedBookId, setRequestedBookId] = useState({});
 
   const fetchCategoryMenu = async () => {
     const response = await axios.get(url + "getAllCategory");
@@ -45,11 +48,20 @@ const StoreContextProvider = (props) => {
     }
   };
 
+  const fetchRequestedBook = async () => {
+    const newurl = url + "getRequestedBook";
+    const response = await axiosInstance.get(newurl);
+    if (response.status == 200) {
+      setRequestedBookData(response.data.data);
+    }
+  };
+
   const fetchOneBook = async (itemId) => {
     const myurl = url + "getOneBook";
     const obj = { bookId: itemId };
     const getbook = await axiosInstance.post(myurl, obj);
     if (getbook.status == 200) {
+      setRequestedBook(getbook.data.data);
       const realQuantity = getbook.data.data.quantity;
       return realQuantity;
     }
@@ -60,6 +72,7 @@ const StoreContextProvider = (props) => {
       await fetchCategoryMenu();
       await fetchBookdata();
       await fetchCart();
+      await fetchRequestedBook();
     }
     loadData();
   }, []);
@@ -88,6 +101,12 @@ const StoreContextProvider = (props) => {
     totalBil,
     setTotalBil,
     fetchOneBook,
+    requestedBook,
+    setRequestedBook,
+    requestedBookData,
+    setRequestedBookData,
+    requestedBookId,
+    setRequestedBookId,
   };
 
   return (

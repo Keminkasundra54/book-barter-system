@@ -54,8 +54,8 @@ function Cards({ bookData, category, token, limited, showfour }) {
     }
   };
 
-  const handleRequest = async () => {
-    console.log("hy i am req");
+  const handleRequest = async (itemId) => {
+    navigate(`/AddRequestBook/${itemId}`);
   };
 
   const handlePrev = (item, cardIndex) => {
@@ -146,7 +146,7 @@ function Cards({ bookData, category, token, limited, showfour }) {
 
                     <div className="card-body mt-4">
                       <h2 className="card-title">{item.title}</h2>
-                      <p>If a dog chews shoes whose shoes does he choose?</p>
+                      <p>{item.description}</p>
                       <div className="flex justify-between">
                         <h3 className="flex gap-2">
                           <p
@@ -170,7 +170,7 @@ function Cards({ bookData, category, token, limited, showfour }) {
                           {item.condition}
                         </h3>
                         <h3>
-                          <span className="font-bold">Language:</span>{" "}
+                          <span className="font-bold">Lang:</span>{" "}
                           {item.language}
                         </h3>
                       </div>
@@ -184,7 +184,7 @@ function Cards({ bookData, category, token, limited, showfour }) {
                           item.radio === "donate" ? (
                             <button
                               className={`btn btn-success`}
-                              onClick={() => handleRequest()}
+                              onClick={() => handleRequest(item._id)}
                             >
                               Request
                             </button>

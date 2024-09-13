@@ -5,8 +5,10 @@ router.post("/addOrder", orderController.addOrder);
 router.get("/getUserOrder", orderController.getUserOrder);
 router.post("/getOrderDetail", orderController.getOrderDetail);
 router.get("/getSellerOrder", orderController.getSellerOrder);
-router.get("/getAllOrderData", orderController.getAllOrderData);
+router.post("/getAllOrderData", orderController.getAllOrderData);
 router.post("/updateOrder", orderController.updateOrder);
 router.post("/updateSellerStatus", orderController.updateSellerStatus);
+router.post("/addBookRequest", orderController.addBookRequest);
+router.get("/getRequestedBook", orderController.getRequestedBook);
 
 module.exports = router;
