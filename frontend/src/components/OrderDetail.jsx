@@ -140,7 +140,7 @@ function OrderDetail() {
               <div className="flex flex-col items-end w-52 gap-3 ml-auto py-4">
                 <div className="flex justify-between w-full">
                   <span>Product Total</span>
-                  <p>{orderData.totalAmount - 10}</p>
+                  <p>{(orderData.totalAmount - 10).toFixed(2)}</p>
                 </div>
                 <div className="flex justify-between w-full">
                   <span>Shipping Cost</span>
@@ -149,7 +149,7 @@ function OrderDetail() {
                 <hr className="w-full h-[2px] bg-slate-800"></hr>
                 <div className="flex justify-between w-full font-bold">
                   <span>Total</span>
-                  <p>{orderData.totalAmount}</p>
+                  <p>{(orderData.totalAmount).toFixed(2)}</p>
                 </div>
               </div>
             </div>

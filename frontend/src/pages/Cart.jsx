@@ -21,6 +21,8 @@ function Cart() {
       setTimeout(() => {
         fetchCart();
       }, 1500);
+    } else {
+      toast.error("Something get wrong", { autoClose: 1500 });
     }
   };
 
@@ -37,7 +39,6 @@ function Cart() {
         fetchCart();
       }
     } else {
-    
       toast.error(`Oops! We have only ${realQuantity} Product left.`, {
         autoClose: 1500,
       });
@@ -154,7 +155,9 @@ function Cart() {
                     <hr className="mb-10" />
                     <div className="cart-total-details flex justify-between text-gray-800 p-1">
                       <b>Total</b>
-                      <b>{gettotal() === 0 ? 0 : gettotal() + 10}</b>
+                      <b>
+                        {gettotal() === 0 ? 0 : (gettotal() + 10).toFixed(2)}
+                      </b>
                     </div>
                   </div>
                   {cartData.length && (

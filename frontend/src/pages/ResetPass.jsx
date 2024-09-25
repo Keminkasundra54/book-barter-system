@@ -27,6 +27,7 @@ function ResetPass() {
         navigate("/");
       }, 1500);
     }
+    toast.error("something get Wrong", { autoClose: 1500 });
   };
 
   const handleonchange = (e) => {

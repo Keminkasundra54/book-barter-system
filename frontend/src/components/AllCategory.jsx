@@ -38,6 +38,8 @@ function AllCategory() {
       setTimeout(() => {
         navigate("/categorys");
       }, 1500);
+    } else {
+      toast.error("Something get wrong", { autoClose: 1500 });
     }
   };
   useEffect(() => {

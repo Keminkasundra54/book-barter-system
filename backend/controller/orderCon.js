@@ -1,8 +1,10 @@
+const { stat } = require("fs");
 const Book = require("../model/book-model");
 const RequestedBook = require("../model/bookRequest-model");
 const Cart = require("../model/Cart-model");
 const Order = require("../model/order-model");
 const SellerOrder = require("../model/sellerOrder-model");
+const SellerRequest = require("../model/sellerRequest-model");
 const User = require("../model/user-model");
 const { v4: uuidv4 } = require("uuid");
 
@@ -121,11 +123,11 @@ exports.getAllOrderData = async (req, res) => {
         ],
       },
     }).populate({ path: "userId" });
+
     for (let i in orderData) {
       const allseller = [];
-      const sellerOrder = await SellerOrder.find({
-        order: orderData[i]._id,
-      }).populate({ path: "book" });
+      const sellerOrder = await SellerOrder.find({order: orderData[i]._id,}).populate({ path: "book" });
+
       for (let i in sellerOrder) {
         const seller = await User.findOne({ token: sellerOrder[i].seller });
         sellerOrder[i] = sellerOrder[i].toObject();
@@ -176,32 +178,4 @@ exports.updateSellerStatus = async (req, res) => {
     res.status(500).json(err);
   }
 };
-exports.addBookRequest = async (req, res) => {
-  try {
-    const myData = await RequestedBook.find({});
 
-    const newRequest = new RequestedBook(req.body);
-    if (req.body.user == null && req.body.user != undefined) {
-      console.log("hy");
-    }
-    newRequest.orderNo = myData.length + 1;
-    await newRequest.save();
-    res.json({ message: "ok" });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-};
-exports.getRequestedBook = async (req, res) => {
-  try {
-    const user = await User.findOne({ token: req.headers.token });
-    const myData = await RequestedBook.find({ user: user._id }).populate({
-      path: "book",
-      ref: "book",
-    });
-    res.json({ message: "ok", data: myData });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
-  }
-};

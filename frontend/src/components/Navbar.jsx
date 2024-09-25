@@ -20,20 +20,20 @@ function Navbar({ setlogin }) {
     navigate("/");
     localStorage.removeItem("token");
     localStorage.removeItem("userdata");
-    setuser(null); // Clear user state
-    setIsModalOpen(false); // Close the modal after logging out
+    setuser(null);
+    setIsModalOpen(false);
   };
 
   const handlelogin = () => {
     navigate("/");
     setlogin(true);
     window.scrollTo({
-      top: 0, // Scroll to the top
-      behavior: "smooth", // Optional: Smooth scroll
+      top: 0,
+      behavior: "smooth",
     });
   };
   useEffect(() => {
-    const handlestate = () => {
+    const handleScroll = () => {
       if (window.scrollY > 0) {
         setSticky(true);
       } else {
@@ -41,17 +41,24 @@ function Navbar({ setlogin }) {
       }
     };
     window.scrollTo(0, 0);
-    window.addEventListener("scroll", handlestate);
-
-    const isuser = localStorage.getItem("userdata");
-    if (isuser) {
-      const jsonuser = JSON.parse(isuser);
-      setuser(jsonuser);
-    }
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handlestate);
+      window.removeEventListener("scroll", handleScroll);
     };
+  }, []);
+
+  useEffect(() => {
+    const isUser = localStorage.getItem("userdata");
+    if (isUser) {
+      const jsonUser = JSON.parse(isUser);
+      setuser((prevUser) => {
+        if (JSON.stringify(prevUser) !== JSON.stringify(jsonUser)) {
+          return jsonUser;
+        }
+        return prevUser;
+      });
+    }
   }, []);
 
   const handleBook = () => {
@@ -195,12 +202,22 @@ function Navbar({ setlogin }) {
                       <p>my Selling Book</p>
                     </li>
                   </Link>
-                  {user != null && user.role == 1 && (
-                    <Link to="/addCategory" onClick={() => setCategryItem({})}>
-                      <li>
-                        <p>Add Category</p>
-                      </li>
-                    </Link>
+                  {user != null && user.role == 2 && (
+                    <>
+                      <Link
+                        to="/addCategory"
+                        onClick={() => setCategryItem({})}
+                      >
+                        <li>
+                          <p>Add Category</p>
+                        </li>
+                      </Link>
+                      <Link to="/AdminOrder">
+                        <li>
+                          <p>All Orders</p>
+                        </li>
+                      </Link>
+                    </>
                   )}
                   <Link to="/myorder">
                     <li>
@@ -215,6 +232,11 @@ function Navbar({ setlogin }) {
                   <Link to="/incomingorder">
                     <li>
                       <button>Incoming Order</button>
+                    </li>
+                  </Link>
+                  <Link to="/report">
+                    <li>
+                      <button>Report</button>
                     </li>
                   </Link>
                   <li>

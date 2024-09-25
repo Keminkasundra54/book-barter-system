@@ -25,9 +25,8 @@ function UserOrder() {
   const navigate = useNavigate();
 
   const handleViewClick = (orderId) => {
-    navigate(`/order-details/${orderId}`); // Navigate to the detail page with order ID
+    navigate(`/order-details/${orderId}`);
   };
-  console.log(orderData);
   return (
     <div className="flex flex-col min-h-screen ">
       <Navbar />
@@ -65,7 +64,7 @@ function UserOrder() {
                           `}
                         </p>
                         <p className="text-center">{item.status}</p>
-                        <p className="text-center">{item.totalAmount}</p>
+                        <p className="text-center">{(item.totalAmount).toFixed(2)}</p>
                         <p className="text-center">{item.items.length} items</p>
                         <button
                           className="btn btn-link text-right pr-5"

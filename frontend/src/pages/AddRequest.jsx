@@ -28,29 +28,42 @@ function AddRequest() {
     const newurl = url + "getUser";
     const response = await axiosInstance.get(newurl);
     if (response.status == 200) {
-      setUser(response.data.data);
+      const fetchedData = response.data.data;
+      if (JSON.stringify(user) !== JSON.stringify(fetchedData)) {
+        setUser(fetchedData);
+      }
     }
   };
-  console.log(requestedBook);
-
   useEffect(() => {
     fetchUserData();
     fetchOneBook(id);
   }, [id]);
 
   useEffect(() => {
-    setData({
-      name: requestedBook?.title || "",
-      book: requestedBook?._id || "",
-      user: user?._id || "",
-      phone: user?.phone || "",
-      street: user?.street || "",
-      city: user?.city || "",
-      state: user?.state || "",
-      country: user?.country || "",
-      zip: user?.zip || "",
-      description: "",
-    });
+    if (
+      data.name !== requestedBook?.title ||
+      data.book !== requestedBook?._id ||
+      data.user !== user?._id ||
+      data.phone !== user?.phone ||
+      data.street !== user?.street ||
+      data.city !== user?.city ||
+      data.state !== user?.state ||
+      data.country !== user?.country ||
+      data.zip !== user?.zip
+    ) {
+      setData({
+        name: requestedBook?.title || "",
+        book: requestedBook?._id || "",
+        user: user?._id || "",
+        phone: user?.phone || "",
+        street: user?.street || "",
+        city: user?.city || "",
+        state: user?.state || "",
+        country: user?.country || "",
+        zip: user?.zip || "",
+        description: "",
+      });
+    }
   }, [requestedBook, user]);
 
   const handleChnageValue = (e) => {
@@ -61,7 +74,6 @@ function AddRequest() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const newurl = url + "addBookRequest";
-    console.log(data); // Confirm data being sent
     const response = await axiosInstance.post(newurl, data);
     if (response.status === 200) {
       toast.success("Request added", { autoClose: 1500 });
@@ -69,6 +81,8 @@ function AddRequest() {
         navigate("/");
       }, 1500);
       setData({});
+    } else {
+      toast.error("Something get wrong", { autoClose: 1500 });
     }
   };
 
@@ -90,7 +104,7 @@ function AddRequest() {
                       placeholder="Book Name"
                       className="input input-bordered text-sm w-full h-9"
                       name="name"
-                      value={requestedBook.title}
+                      defaultValue={requestedBook.title}
                       required
                     />
                   </div>

@@ -6,6 +6,10 @@ const bookRequestSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "book",
     },
+    seller: {
+      type: mongoose.Schema.ObjectId,
+      ref: "user",
+    },
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "user",
@@ -26,6 +30,13 @@ const bookRequestSchema = new mongoose.Schema(
     description: {
       type: String,
       default: null,
+    },
+    address: {
+      type: String,
+      default: null,
+    },
+    phone: {
+      type: String,
     },
   },
   {

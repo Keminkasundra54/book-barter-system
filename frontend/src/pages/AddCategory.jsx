@@ -37,7 +37,7 @@ function AddCategory() {
       });
       setPreviewUrl(null);
     }
-  }, [categoryItem , url]);
+  }, [categoryItem, url]);
 
   const handleChnageValue = (e) => {
     const { name, value } = e.target;
@@ -65,11 +65,11 @@ function AddCategory() {
     let newurl;
     if (categoryItem._id) {
       newurl = url + "updateCategory";
-      successMessage = "category update succesfully"
+      successMessage = "category update succesfully";
       formData.append("_id", categoryItem._id);
     } else {
       newurl = url + "addCategory";
-       successMessage = "category add succesfully"
+      successMessage = "category add succesfully";
     }
 
     formData.append("image", selectedFile);
@@ -87,12 +87,14 @@ function AddCategory() {
         });
         categoryItem({});
         setPreviewUrl(null);
-     
+
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
         setSelectedFile([]);
       }, 1500);
+    } else {
+      toast.error("Something get wrong", { autoClose: 1500 });
     }
   };
   return (

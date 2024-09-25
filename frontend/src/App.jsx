@@ -1,7 +1,8 @@
-import { Route, Routes } from "react-router-dom";
+/* eslint-disable react/prop-types */
+import { Route, Routes, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Books from "./pages/Books";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ForgotPass from "./pages/ForgotPass";
 import ResetPass from "./pages/ResetPass";
@@ -18,31 +19,99 @@ import ReciveOrder from "./components/ReciveOrder";
 import AdminOrder from "./pages/AdminOrder";
 import UserRequestedBook from "./components/UserRequestedBook";
 import AddRequest from "./pages/AddRequest";
+import Report from "./pages/Report";
+import { useContext, useEffect } from "react";
+import { StoreContext } from "./context/StoreContext";
+import AdminRequest from "./pages/AdminRequest";
 
 function App() {
+  const { setlogin } = useContext(StoreContext);
+
+  const isAuthenticated = () => {
+    return localStorage.getItem("token") !== null;
+  };
+
+  const ProtectedRoute = ({ element: Component, ...props }) => {
+    useEffect(() => {
+      if (!isAuthenticated()) {
+        setlogin(true);
+        toast.success("Please Login", { autoClose: 1500 });
+      } else {
+        setlogin(false);
+      }
+    }, []);
+
+    if (!isAuthenticated()) {
+      return <Navigate to="/" replace />;
+    }
+
+    return <Component {...props} />;
+  };
+
   return (
     <>
       <Routes>
-        <Route path="/" Component={Home}></Route>
-        <Route path="/books" Component={Books}></Route>
-        <Route path="/forgotpassword" Component={ForgotPass}></Route>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/books" element={<Books />}></Route>
+        <Route path="/forgotpassword" element={<ForgotPass />}></Route>
         <Route
           path="/resetpassword/:email/:token"
-          Component={ResetPass}
+          element={<ResetPass />}
         ></Route>
-        <Route path="/addtosell" Component={AddToSell}></Route>
-        <Route path="/addCategory" Component={AddCategory}></Route>
-        <Route path="/mysellbook" Component={UserBook}></Route>
-        <Route path="/categorys" Component={AllCategory}></Route>
-        <Route path="/profile" Component={UpdateProfile}></Route>
-        <Route path="/cart" Component={Cart}></Route>
-        <Route path="/addAddress" Component={AddAddress}></Route>
-        <Route path="/myOrder" Component={UserOrder}></Route>
-        <Route path="/order-details/:id" Component={OrderDetail} />
-        <Route path="/incomingorder" Component={ReciveOrder} />
-        <Route path="/AdminOrder" Component={AdminOrder} />
-        <Route path="/RequestedBooks" Component={UserRequestedBook} />
-        <Route path="/AddRequestBook/:id" Component={AddRequest} />
+        <Route
+          path="/addtosell"
+          element={<ProtectedRoute element={AddToSell} />}
+        ></Route>
+        <Route
+          path="/addCategory"
+          element={<ProtectedRoute element={AddCategory} />}
+        ></Route>
+        <Route
+          path="/mysellbook"
+          element={<ProtectedRoute element={UserBook} />}
+        ></Route>
+        <Route
+          path="/categorys"
+          element={<ProtectedRoute element={AllCategory} />}
+        ></Route>
+        <Route
+          path="/profile"
+          element={<ProtectedRoute element={UpdateProfile} />}
+        ></Route>
+        <Route path="/cart" element={<ProtectedRoute element={Cart} />}></Route>
+        <Route
+          path="/addAddress"
+          element={<ProtectedRoute element={AddAddress} />}
+        ></Route>
+        <Route
+          path="/myOrder"
+          element={<ProtectedRoute element={UserOrder} />}
+        ></Route>
+        <Route
+          path="/order-details/:id"
+          element={<ProtectedRoute element={OrderDetail} />}
+        />
+        <Route
+          path="/incomingorder"
+          element={<ProtectedRoute element={ReciveOrder} />}
+        ></Route>
+        <Route
+          path="/AdminOrder"
+          element={<ProtectedRoute element={AdminOrder} />}
+        />
+        <Route
+          path="/RequestedBooks"
+          element={<ProtectedRoute element={UserRequestedBook} />}
+        />
+        <Route
+          path="/AddRequestBook/:id"
+          element={<ProtectedRoute element={AddRequest} />}
+        />
+        <Route path="/report" element={<ProtectedRoute element={Report} />} />
+        <Route
+          path="/AdminRequest"
+          element={<ProtectedRoute element={AdminRequest} />}
+        />
       </Routes>
       <ToastContainer />
     </>

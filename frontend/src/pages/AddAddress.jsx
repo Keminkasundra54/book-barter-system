@@ -39,7 +39,7 @@ function AddAddress() {
         fetchCart();
       }, 1500);
     } else {
-      toast.error("error");
+      toast.error("Somthing get wrong", { autoClose: 1500 });
     }
   };
 

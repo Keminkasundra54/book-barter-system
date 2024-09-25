@@ -8,7 +8,7 @@ import "../index.css";
 import { useRef } from "react";
 import Loader from "react-js-loader";
 
-function AdminOrder() {
+function AdminRequest() {
   const [orderData, setOrderData] = useState([]);
   const detailsRef = useRef(null);
   const detailsRef2 = useRef(null);
@@ -41,9 +41,9 @@ function AdminOrder() {
   };
 
   const handleStatus = async (e, itemid) => {
-    const newurl = url + "updateOrder";
+    const newurl = url + "updateRequest";
     const obj = {
-      orderId: itemid,
+      _id: itemid,
       status: e.target.value,
     };
     const response = await axiosInstance.post(newurl, obj);
@@ -53,9 +53,9 @@ function AdminOrder() {
   };
 
   const handleSellerStatus = async (e, itemId) => {
-    const newurl = url + "updateSellerStatus";
+    const newurl = url + "updateSellerRequest";
     const obj = {
-      sellerOrderId: itemId,
+      _id: itemId,
       status: e.target.value,
     };
     const response = await axiosInstance.post(newurl, obj);
@@ -99,7 +99,7 @@ function AdminOrder() {
   }, [year, month]);
 
   const fetchOrderData = async () => {
-    const newurl = url + "getAllOrderData";
+    const newurl = url + "getAllDonateBook";
     const obj = {
       month: month,
       year: year,
@@ -109,7 +109,6 @@ function AdminOrder() {
       setOrderData(response.data.data);
     }
   };
-
   return (
     <div>
       <div className="flex flex-col min-h-screen ">
@@ -210,7 +209,7 @@ function AdminOrder() {
                           <div className="top flex justify-between p-2 bg-slate-300">
                             <div className="top-right">
                               <div className="pb-2">
-                                Order No : #00{item.orderNo}
+                                Order No : #11{item.orderNo}
                               </div>
                               <div className="">
                                 Order Date:{" "}
@@ -241,10 +240,9 @@ function AdminOrder() {
                                 >
                                   status
                                 </option>
-                                <option value="Requested">Requested</option>
-                                <option value="Confirmed">Confirmed</option>
-                                <option value="Shipped">Shipped</option>
-                                <option value="Delevierd">Delevierd</option>
+                                <option value="Requested">Pending</option>
+                                <option value="Confirmed">Approved</option>
+                                <option value="Shipped">Rejected</option>
                               </select>
                             </div>
                           </div>
@@ -269,9 +267,7 @@ function AdminOrder() {
                                           {" "}
                                           {sellerData.book.title}
                                         </p>
-                                        <p className="text-center">
-                                          {sellerData.quantity}
-                                        </p>
+                                        <p className="text-center">{1}</p>
                                         <p className="text-center">
                                           {" "}
                                           {sellerData.seller.firstname}{" "}
@@ -326,8 +322,7 @@ function AdminOrder() {
                                 <div className="flex items-center">
                                   <span className="w-40">User Name:</span>
                                   <span className="font-thin">
-                                    {item.userId.firstname}{" "}
-                                    {item.userId.lastname}
+                                    {item.user.firstname} {item.user.lastname}
                                   </span>
                                 </div>
                                 <div className="flex items-center">
@@ -335,30 +330,14 @@ function AdminOrder() {
                                     Phone:
                                   </span>
                                   <span className="font-thin">
-                                    {item.userId.phone}
+                                    {item.phone}
                                   </span>
                                 </div>
-                                <div className="flex items-center">
-                                  <span className="font-semibold w-40">
-                                    Payment Method:
-                                  </span>
-                                  <span className="font-thin">
-                                    {item.paymentMethod}
-                                  </span>
-                                </div>
-                                <div className="flex items-center">
-                                  <span className="font-semibold w-40">
-                                    Total Amount:
-                                  </span>
-                                  <span className="font-thin">
-                                    {item.totalAmount}
-                                  </span>
-                                </div>
-                                <div className="flex items-start">
-                                  <span className="font-semibold w-40">
+                                <div className="flex items-start space-x-4">
+                                  <span className="font-semibold flex-shrink-0">
                                     Deliver To:
                                   </span>
-                                  <span className="font-thin w-60">
+                                  <span className="font-thin flex-grow break-all">
                                     {item.address}
                                   </span>
                                 </div>
@@ -384,4 +363,6 @@ function AdminOrder() {
   );
 }
 
-export default AdminOrder;
+export default AdminRequest;
+
+// add seller on

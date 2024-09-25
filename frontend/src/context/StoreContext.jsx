@@ -7,8 +7,23 @@ export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
   const [login, setlogin] = useState(false);
-  const url = "http://192.168.1.16:4000/";
-  const [user, setuser] = useState({});
+  const url = "http://192.168.1.8:5000/";
+  const [user, setuser] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    street: "",
+    city: "",
+    gender: "",
+    state: "",
+    country: "",
+    zip: "",
+    token: "",
+    role: "",
+    profile: "",
+    phone: "",
+  });
   const [role, setrole] = useState(null);
   const [token, setToken] = useState({});
   const [category, setcategory] = useState("All");
@@ -61,7 +76,10 @@ const StoreContextProvider = (props) => {
     const obj = { bookId: itemId };
     const getbook = await axiosInstance.post(myurl, obj);
     if (getbook.status == 200) {
-      setRequestedBook(getbook.data.data);
+      const fetchedData = getbook.data.data;
+      if (JSON.stringify(requestedBook) !== JSON.stringify(fetchedData)) {
+        setRequestedBook(fetchedData);
+      }
       const realQuantity = getbook.data.data.quantity;
       return realQuantity;
     }

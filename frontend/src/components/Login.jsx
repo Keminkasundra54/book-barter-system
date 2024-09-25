@@ -62,6 +62,8 @@ function Login({ setlogin }) {
         setlogin(false);
         setuser(response.data.data);
       }, 1500);
+    } else {
+      toast.error("Something get Wrong", { autoClose: 1500 });
     }
   };
 
@@ -251,7 +253,6 @@ function Login({ setlogin }) {
                       name="phone"
                       pattern="\d{10}"
                       value={data.phone}
-                     
                       onChange={handleChnageValue}
                       title="Phone number must be exactly 10 digits"
                       required

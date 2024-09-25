@@ -14,19 +14,29 @@ import { Link } from "react-router-dom";
 function UpdateProfile() {
   const { user, setuser, url } = useContext(StoreContext);
   const [isToggled, setIsToggled] = useState(true);
+  const [isCall, setIsCall] = useState(true);
   const fileInputRef = useRef(null);
   const fromdata = new FormData();
   const [selectedImage, setSelectedImage] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
+
   const fetchuserdata = async () => {
     const newurl = url + "getUser";
     const response = await axiosInstance.get(newurl);
-    if (response.status == 200) {
+    if (response.status === 200) {
+      setIsCall(false);
       setuser(response.data.data);
     } else {
-      console.log("err at getuser");
+      console.log("Error at getUser: Response not successful");
     }
   };
+
+  useEffect(() => {
+    console.log(isCall);
+    if (isCall == false) {
+      fetchuserdata();
+    }
+  }, []);
 
   const handleImageClick = () => {
     fileInputRef.current.click();
@@ -66,10 +76,6 @@ function UpdateProfile() {
     const value = e.target.value;
     setuser((prev) => ({ ...prev, [name]: value }));
   };
-
-  useEffect(() => {
-    fetchuserdata();
-  }, []);
 
   return (
     <>

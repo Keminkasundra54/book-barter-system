@@ -14,7 +14,6 @@ function UserRequestedBook() {
     const newurl = url + "getRequestedBook";
     const response = await axiosInstance.get(newurl);
     if (response.status == 200) {
-      console.log(response.data.data);
       setOrderData(response.data.data);
     }
   };

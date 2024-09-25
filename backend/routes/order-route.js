@@ -8,7 +8,5 @@ router.get("/getSellerOrder", orderController.getSellerOrder);
 router.post("/getAllOrderData", orderController.getAllOrderData);
 router.post("/updateOrder", orderController.updateOrder);
 router.post("/updateSellerStatus", orderController.updateSellerStatus);
-router.post("/addBookRequest", orderController.addBookRequest);
-router.get("/getRequestedBook", orderController.getRequestedBook);
 
 module.exports = router;

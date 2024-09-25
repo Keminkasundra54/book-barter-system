@@ -30,7 +30,7 @@ function ForgotPass() {
         setSentEmail(true);
       }, 1500);
     } else {
-      toast.error("please enter valid email");
+      toast.error("Something get Wrong", { autoClose: 1500 });
     }
   };
 

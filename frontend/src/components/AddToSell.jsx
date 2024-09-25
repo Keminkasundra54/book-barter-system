@@ -103,6 +103,8 @@ function AddToSell() {
         }
         setSelectedFile([]);
       }, 1500);
+    } else {
+      toast.error("Something get Wrong", { autoClose: 1500 });
     }
   };
 
@@ -349,7 +351,6 @@ function AddToSell() {
                           type="radio"
                           name="radio"
                           className="radio checked:bg-red-500 ml-2"
-                          
                           onChange={handleChnageValue}
                           value="donate"
                           checked={data.radio === "donate"}

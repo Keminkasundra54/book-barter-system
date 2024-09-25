@@ -23,6 +23,7 @@ exports.register = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     const token = req.headers.token;
+    console.log(token);
     const userdata = await User.findOne({ token: token });
     if (userdata) {
       res.json({ message: "ok", data: userdata });
