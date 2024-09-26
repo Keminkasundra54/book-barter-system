@@ -28,7 +28,8 @@ router.post("/login", usercontroller.login);
 router.post("/resetpassword", usercontroller.resetpass);
 router.post("/frgtpassword", usercontroller.frgtpassword);
 
-router.get("/getUser", usercontroller.getUser);
+router.post("/getUser", usercontroller.getUser);
+
 router.post(
   "/updateProfile",
   upload.single("profile"),

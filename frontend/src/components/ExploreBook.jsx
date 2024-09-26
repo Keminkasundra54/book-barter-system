@@ -91,7 +91,7 @@ function ExploreBook() {
       };
       fetchFilteredData();
     }
-  }, [filters, loader]);
+  }, [loader]);
 
   const handleChangeValue = async (e) => {
     if (e && e.target !== undefined) {

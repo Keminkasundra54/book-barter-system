@@ -12,13 +12,24 @@ app.use(express.static(path.join(__dirname, "./upload/bookimage")));
 app.use(express.static(path.join(__dirname, "./upload/profile")));
 
 const routes = require("./routes/routes");
-const bookroutes = require("./routes/book-route");
-const cartroutes = require("./routes/cart-route");
-const categoryroutes = require("./routes/category-route");
-const orderoutes = require("./routes/order-route");
-const adminroutes = require("./routes/admin-route");
-const requestroute = require("./routes/request-route");
+const bookRoutes = require("./routes/book-route");
+const cartRoutes = require("./routes/cart-route");
+const categoryRoutes = require("./routes/category-route");
+const orderRoutes = require("./routes/order-route");
+const adminRoutes = require("./routes/admin-route");
+const requestRoutes = require("./routes/request-route");
+const commentRoutes = require("./routes/comment-route");
 
-app.use("/",routes,bookroutes,cartroutes,categoryroutes,orderoutes,adminroutes,requestroute);
+app.use(
+  "/",
+  routes,
+  bookRoutes,
+  cartRoutes,
+  categoryRoutes,
+  orderRoutes,
+  adminRoutes,
+  requestRoutes,
+  commentRoutes
+);
 
 app.listen(5000, () => console.log("app run on 5000 port"));

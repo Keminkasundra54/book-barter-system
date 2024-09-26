@@ -32,6 +32,9 @@ function Navbar({ setlogin }) {
       behavior: "smooth",
     });
   };
+  const handleProfile = (token) => {
+    navigate("/profile", { state: { token } });
+  };
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
@@ -95,7 +98,7 @@ function Navbar({ setlogin }) {
         </Link>
       </li>
       <li>
-        <a>About</a>
+        <Link to="/aboutus">About</Link>
       </li>
     </>
   );
@@ -192,11 +195,10 @@ function Navbar({ setlogin }) {
                   tabIndex={0}
                   className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
                 >
-                  <Link to="/profile">
-                    <li>
-                      <p>Profile</p>
-                    </li>
-                  </Link>
+                  <li onClick={() => handleProfile(user.token)}>
+                    <p>Profile</p>
+                  </li>
+
                   <Link to="/mysellbook">
                     <li>
                       <p>my Selling Book</p>
@@ -234,9 +236,9 @@ function Navbar({ setlogin }) {
                       <button>Incoming Order</button>
                     </li>
                   </Link>
-                  <Link to="/report">
+                  <Link to="/userlist">
                     <li>
-                      <button>Report</button>
+                      <button>User List</button>
                     </li>
                   </Link>
                   <li>

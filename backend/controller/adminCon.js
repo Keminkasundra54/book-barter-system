@@ -1,5 +1,6 @@
 const RequestedBook = require("../model/bookRequest-model");
 const Order = require("../model/order-model");
+const User = require("../model/user-model");
 
 exports.getAllRequestedOrder = async (req, res) => {
   try {
@@ -32,6 +33,15 @@ exports.getAllDonated = async (req, res) => {
   try {
     const allData = await RequestedBook.find({ status: { $ne: "Pending" } });
     res.json({ message: "ok", data: allData });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+exports.getAllUsers = async (req, res) => {
+  try {
+    const userdata = await User.find({ role: 0 });
+    res.status(200).json({ message: "ok", data: userdata });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);

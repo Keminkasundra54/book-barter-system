@@ -5,5 +5,6 @@ router.get("/getAllRequestedOrder", adminController.getAllRequestedOrder);
 router.get("/getAllDeliverOrder", adminController.getAllDeliverOrder);
 router.get("/getAllDonatedRequest", adminController.getAllDonatedRequest);
 router.get("/getAllDonated", adminController.getAllDonated);
+router.get("/getUsers", adminController.getAllUsers);
 
 module.exports = router;

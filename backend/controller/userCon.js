@@ -22,8 +22,7 @@ exports.register = async (req, res) => {
 
 exports.getUser = async (req, res) => {
   try {
-    const token = req.headers.token;
-    console.log(token);
+    const token = req.body.token;
     const userdata = await User.findOne({ token: token });
     if (userdata) {
       res.json({ message: "ok", data: userdata });
@@ -42,7 +41,7 @@ exports.updateProfile = async (req, res) => {
       jsondata.profile = req.file.filename;
     }
     const updateuser = await User.findOneAndUpdate(
-      { token: token },
+      { _id: jsondata._id },
       { $set: jsondata },
       { new: true }
     );

@@ -32,7 +32,6 @@ function UpdateProfile() {
   };
 
   useEffect(() => {
-    console.log(isCall);
     if (isCall == false) {
       fetchuserdata();
     }

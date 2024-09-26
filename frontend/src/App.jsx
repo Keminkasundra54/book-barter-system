@@ -7,22 +7,26 @@ import "react-toastify/dist/ReactToastify.css";
 import ForgotPass from "./pages/ForgotPass";
 import ResetPass from "./pages/ResetPass";
 import AddToSell from "./components/AddToSell";
-import AddCategory from "./pages/AddCategory";
+import AddCategory from "./adminpage/AddCategory";
 import UserBook from "./components/userBook";
 import AllCategory from "./components/AllCategory";
-import UpdateProfile from "./components/updateProfile";
+// import UpdateProfile from "./components/updateProfile";
 import Cart from "./pages/Cart";
 import AddAddress from "./pages/addAddress";
 import UserOrder from "./components/UserOrder";
 import OrderDetail from "./components/OrderDetail";
 import ReciveOrder from "./components/ReciveOrder";
-import AdminOrder from "./pages/AdminOrder";
+import AdminOrder from "./adminpage/AdminOrder";
 import UserRequestedBook from "./components/UserRequestedBook";
 import AddRequest from "./pages/AddRequest";
-import Report from "./pages/Report";
+// import Report from "./pages/Report";
 import { useContext, useEffect } from "react";
 import { StoreContext } from "./context/StoreContext";
-import AdminRequest from "./pages/AdminRequest";
+import AdminRequest from "./adminpage/AdminRequest";
+import SecoundUser from "./pages/SecoundUser";
+import AboutUs from "./pages/AboutUs";
+import UserList from "./adminpage/UserList";
+import Comment from "./adminpage/Comment";
 
 function App() {
   const { setlogin } = useContext(StoreContext);
@@ -53,6 +57,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/books" element={<Books />}></Route>
+        <Route path="/aboutus" element={<AboutUs />}></Route>
         <Route path="/forgotpassword" element={<ForgotPass />}></Route>
         <Route
           path="/resetpassword/:email/:token"
@@ -76,7 +81,7 @@ function App() {
         ></Route>
         <Route
           path="/profile"
-          element={<ProtectedRoute element={UpdateProfile} />}
+          element={<ProtectedRoute element={SecoundUser} />}
         ></Route>
         <Route path="/cart" element={<ProtectedRoute element={Cart} />}></Route>
         <Route
@@ -107,10 +112,17 @@ function App() {
           path="/AddRequestBook/:id"
           element={<ProtectedRoute element={AddRequest} />}
         />
-        <Route path="/report" element={<ProtectedRoute element={Report} />} />
+        <Route
+          path="/userlist"
+          element={<ProtectedRoute element={UserList} />}
+        />
         <Route
           path="/AdminRequest"
           element={<ProtectedRoute element={AdminRequest} />}
+        />
+        <Route
+          path="/feedback"
+          element={<ProtectedRoute element={Comment} />}
         />
       </Routes>
       <ToastContainer />

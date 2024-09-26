@@ -3,6 +3,12 @@ import book from "./book.jpg";
 import close from "./close-img.png";
 import menubgimg from "./banner-bg.jpg";
 import profile from "./profile.jpg";
+import group from "./group1.jpg";
+import group2 from "./group2.jpg";
+import about1 from "./about1.jpg";
+import about2 from "./about2.jpg";
+import about3 from "./about3.jpg";
+import about4 from "./about4.jpg";
 
 export const assets = {
   banner,
@@ -10,6 +16,12 @@ export const assets = {
   close,
   menubgimg,
   profile,
+  group,
+  group2,
+  about1,
+  about2,
+  about3,
+  about4,
 };
 
 export const bookdata = [
