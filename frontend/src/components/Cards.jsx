@@ -6,14 +6,24 @@ import { Link, useNavigate } from "react-router-dom";
 import "../index.css";
 import axiosInstance from "../axiosInstance";
 import { toast } from "react-toastify";
+import { MdOutlineFavorite } from "react-icons/md";
+import { MdFavoriteBorder } from "react-icons/md";
 
 function Cards({ bookData, category, token, limited, showfour }) {
-  const { setBookItem, url, cartData, fetchCart, fetchOneBook, setlogin } =
-    useContext(StoreContext);
+  const {
+    setBookItem,
+    url,
+    cartData,
+    fetchCart,
+    fetchOneBook,
+    setlogin,
+    fetchBookdata,
+  } = useContext(StoreContext);
 
   const navigate = useNavigate();
-  const isuser = localStorage.getItem("userdata");
+  const isuser = JSON.parse(localStorage.getItem("userdata"));
   const [currentIndexes, setCurrentIndexes] = useState({});
+  const [like, setIsLike] = useState(true);
 
   const handleNext = (item, cardIndex) => {
     setCurrentIndexes((prevIndexes) => ({
@@ -23,6 +33,27 @@ function Cards({ bookData, category, token, limited, showfour }) {
           ? 0
           : (prevIndexes[cardIndex] ?? 0) + 1,
     }));
+  };
+
+  const setLike = async (itemId) => {
+    setIsLike(!like);
+    await handleLike(itemId);
+  };
+
+  const handleLike = async (itemId) => {
+    try {
+      const callapi = await isLiked(itemId);
+      let newurl = callapi ? url + "disLikeBook" : url + "likeBook";
+      const data = {
+        bookId: itemId,
+      };
+      const res = await axiosInstance.post(newurl, data);
+      if (res.status == 200) {
+        fetchBookdata();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const addToCart = async (itemId, qty) => {
@@ -72,6 +103,22 @@ function Cards({ bookData, category, token, limited, showfour }) {
     setBookItem(item);
   };
 
+  const isLiked = (itemid) => {
+    if (isuser != null) {
+      if (Array.isArray(bookData) && bookData.length > 0) {
+        return bookData.some(
+          (item) =>
+            Array.isArray(item.likedBy) &&
+            item.likedBy.some(
+              (user) => user.userId === isuser._id && user.bookId === itemid
+            )
+        );
+      }
+    }
+
+    return false;
+  };
+
   const isInCart = (itemId) => {
     if (cartData.length >= 1) {
       return cartData.some((cartItem) => cartItem.book._id == itemId);
@@ -94,7 +141,7 @@ function Cards({ bookData, category, token, limited, showfour }) {
             <div
               className={`card-container ${
                 limited || showfour
-                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10"
                   : "md:grid md:grid-cols-3 justify-items-center md:gap-14"
               }`}
             >
@@ -160,8 +207,14 @@ function Cards({ bookData, category, token, limited, showfour }) {
                         </h3>
 
                         <h3>
-                          <span className="font-bold">Quantity:</span>{" "}
-                          {item.quantity}
+                          {item.quantity <= 0 ? (
+                            <span className="font-bold">sold out</span>
+                          ) : (
+                            <>
+                              <span className="font-bold">Quantity:</span>{" "}
+                              {item.quantity}{" "}
+                            </>
+                          )}
                         </h3>
                       </div>
                       <div className="flex justify-between">
@@ -179,7 +232,23 @@ function Cards({ bookData, category, token, limited, showfour }) {
                         <span className="font-bold">By </span>
                         {item.author}
                       </h3>
-                      <div className="card-actions justify-end">
+                      <div className="card-actions justify-end items-center">
+                        <div
+                          className="absolute -top-[2%] -right-[7%] bg-white rounded-full"
+                          onClick={() => setLike(item._id)}
+                        >
+                          {isLiked(item._id) ? (
+                            <MdOutlineFavorite
+                              className="w-7 h-7 m-3"
+                              style={{ fill: "red" }}
+                            />
+                          ) : (
+                            <MdFavoriteBorder
+                              className="w-7 h-7 m-3"
+                              style={{ fill: "red" }}
+                            />
+                          )}
+                        </div>
                         {!token ? (
                           item.radio === "donate" ? (
                             <button
@@ -191,7 +260,8 @@ function Cards({ bookData, category, token, limited, showfour }) {
                           ) : (
                             <button
                               className={`btn btn-primary ${
-                                isInCart(item._id) && "btn-disabled"
+                                isInCart(item._id) ||
+                                (item.quantity <= 0 && "btn-disabled")
                               }`}
                               onClick={() => addToCart(item._id, 1)}
                             >

@@ -32,7 +32,6 @@ function SecoundUser() {
     }
   };
 
-
   useEffect(() => {
     fetchuserdata();
   }, []);
@@ -101,7 +100,7 @@ function SecoundUser() {
                       <img
                         onClick={handleImageClick}
                         src={selectedImage || assets.profile}
-                        className="w-44 h-auto border-collapse cursor-pointer"
+                        className="w-40 h-40 border-collapse cursor-pointer rounded-full"
                         alt="Default Profile"
                       />
                     </>
@@ -109,7 +108,7 @@ function SecoundUser() {
                     <img
                       onClick={handleImageClick}
                       src={selectedImage || url + data.profile}
-                      className="w-44 h-auto border-collapse cursor-pointer"
+                      className="w-40 h-40  border-collapse cursor-pointer rounded-full"
                       alt={data.profile}
                     />
                   )}

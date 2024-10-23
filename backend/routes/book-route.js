@@ -21,8 +21,7 @@ router.get("/getUserSellBook", bookController.getUserSellBook);
 router.post("/getBookByCategory", bookController.getBookByCategory);
 router.post("/getOneBook", bookController.getOneBook);
 router.post("/getBookByFilter", bookController.getBookByFilter);
-
-
-
+router.post("/likeBook", bookController.likeBook);
+router.post("/disLikeBook", bookController.disLikeBook);
 
 module.exports = router;

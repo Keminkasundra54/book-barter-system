@@ -99,12 +99,12 @@ const sendsetpass = async (firstname, email, token) => {
       secure: false,
       requireTLS: true,
       auth: {
-        user: "varsha.hubresolution@gmail.com",
-        pass: "sqhc vdpd uujr ynzj",
+        user: "",
+        pass: "",
       },
     });
     const mailOptions = {
-      from: "varsha.hubresolution@gmail.com",
+      from: "",
       to: email,
       subject: "for reset password",
       html: html,

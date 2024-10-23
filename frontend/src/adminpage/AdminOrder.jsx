@@ -215,13 +215,9 @@ function AdminOrder() {
                               <div className="">
                                 Order Date:{" "}
                                 {`
-                          ${String(new Date(item.createdAt).getDate()).padStart(
-                            2,
-                            "0"
-                          )}-${String(
-                                  new Date(item.createdAt).getMonth() + 1
-                                ).padStart(2, "0")}-${new Date().getFullYear()}
-                          `}
+                            ${String(new Date(item.createdAt).getDate()).padStart( 2,"0")}
+                            -${String(new Date(item.createdAt).getMonth() + 1).padStart(2, "0")}
+                            -${new Date().getFullYear()}`}
                               </div>
                             </div>
                             <div className="form-control flex-row items-center">

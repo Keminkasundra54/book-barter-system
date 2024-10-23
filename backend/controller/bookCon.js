@@ -1,6 +1,7 @@
-
 const Book = require("../model/book-model");
 var mongoose = require("mongoose");
+const Like = require("../model/like-model");
+const User = require("../model/user-model");
 
 exports.addBook = async (req, res) => {
   try {
@@ -26,6 +27,19 @@ exports.addBook = async (req, res) => {
 exports.bookData = async (req, res) => {
   try {
     const bookData = await Book.find({});
+    for (let i in bookData) {
+      let users = [];
+      const likeBy = await Like.find({ book: bookData[i]._id });
+      for (let j in likeBy) {
+        const obj = {
+          userId: likeBy[j].user,
+          bookId: likeBy[j].book,
+        };
+        users.push(obj);
+      }
+      bookData[i] = bookData[i].toObject();
+      bookData[i]["likedBy"] = users;
+    }
     res.json({ message: "ok", data: bookData });
   } catch (err) {
     console.log(err);
@@ -123,11 +137,46 @@ exports.getBookByFilter = async (req, res) => {
 
     if (isDonate == true) {
       query.radio = "donate";
-    } else {
-      query.radio = "sell";
     }
     let bookData = await Book.find(query);
     res.status(200).json({ message: "ok", data: bookData });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+
+exports.likeBook = async (req, res) => {
+  try {
+    const token = req.headers.token;
+    const userdata = await User.findOne({ token: token });
+    const likedata = new Like({
+      book: req.body.bookId,
+      user: userdata._id,
+    });
+    const savedata = await likedata.save();
+    if (savedata) {
+      res.status(200).json({ message: "ok" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500), json(err);
+  }
+};
+
+exports.disLikeBook = async (req, res) => {
+  try {
+    const token = req.headers.token;
+    const user = await User.findOne({ token: token });
+    const removeLike = await Like.findOneAndDelete({
+      user: user._id,
+      book: req.body.bookId,
+    });
+    if (removeLike) {
+      res.status(200).json({ message: "ok" });
+    } else {
+      res.status(400).json({ message: "try again" });
+    }
   } catch (err) {
     console.log(err);
     res.status(500).json(err);

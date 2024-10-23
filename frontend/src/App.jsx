@@ -27,6 +27,7 @@ import SecoundUser from "./pages/SecoundUser";
 import AboutUs from "./pages/AboutUs";
 import UserList from "./adminpage/UserList";
 import Comment from "./adminpage/Comment";
+import Chat from "./components/Chat";
 
 function App() {
   const { setlogin } = useContext(StoreContext);
@@ -124,6 +125,7 @@ function App() {
           path="/feedback"
           element={<ProtectedRoute element={Comment} />}
         />
+        <Route path="/chat" element={<ProtectedRoute element={Chat} />} />
       </Routes>
       <ToastContainer />
     </>

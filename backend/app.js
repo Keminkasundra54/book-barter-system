@@ -7,6 +7,12 @@ app.use(express.urlencoded({ extended: false }));
 const path = require("path");
 require("./database/db");
 
+const http = require("http");
+const server = http.createServer(app);
+
+const sokcetChat = require("./socket");
+sokcetChat.initializeChat(server);
+
 app.use(express.static(path.join(__dirname, "./upload/categoryimage")));
 app.use(express.static(path.join(__dirname, "./upload/bookimage")));
 app.use(express.static(path.join(__dirname, "./upload/profile")));
@@ -32,4 +38,4 @@ app.use(
   commentRoutes
 );
 
-app.listen(5000, () => console.log("app run on 5000 port"));
+server.listen(5000, () => console.log("app run on 5000 port"));
